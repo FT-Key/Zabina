@@ -1,53 +1,150 @@
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import React, { useEffect, useState } from 'react';
+import { Navbar, Nav, NavDropdown, Modal, Button } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.svg';
+import { useAuth } from '../context/AuthContext';
 import '../css/NavigationBar.css';
-import { FaSearch } from 'react-icons/fa';
+import SVG from './SVG';
+import { RedirectToLogin, RedirectToRegister } from '../helpers/Redirects';
+import DonationForm from '../components/DonationsForm';
 
-function NavScrollExample() {
+function NavigationBar() {
+  const { user, carrito, favoritos, logoutContext } = useAuth();
+  const navigate = useNavigate();
+  const [expanded, setExpanded] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const setNavbarHeight = () => {
+      const navbar = document.querySelector('.navStyle');
+      if (navbar) {
+        const navbarHeight = navbar.offsetHeight;
+        document.documentElement.style.setProperty('--navbar-height', `${navbarHeight}px`);
+      }
+    };
+
+    setNavbarHeight();
+    window.addEventListener('resize', setNavbarHeight);
+    return () => {
+      window.removeEventListener('resize', setNavbarHeight);
+    };
+  }, []);
+
+  const handleLoginRedirect = () => {
+    RedirectToLogin({ navigate });
+    setExpanded(false);
+  };
+
+  const handleRegisterRedirect = () => {
+    RedirectToRegister({ navigate });
+    setExpanded(false);
+  };
+
+  const handleLogout = () => {
+    logoutContext();
+    setExpanded(false);
+  };
+
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container fluid>
-        <Navbar.Brand href="#">Zabina</Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
-          <Nav
-            className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: '100px' }}
-            navbarScroll
-          >
-            <Nav.Link href="#action1">Inicio</Nav.Link>
-            <Nav.Link href="#action2">Tienda</Nav.Link>
-            <NavDropdown title="Servicios" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Uñas</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Tienda de ropa
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Promociones
-              </NavDropdown.Item>
+    <>
+      <div className='nav-space'></div>
+      <Navbar bg="light" expand="lg" expanded={expanded} onToggle={() => setExpanded(!expanded)} className='navStyle'>
+        <Link className='nav-brand px-2' to="/" onClick={() => setExpanded(false)}>
+          <img src={logo} alt="logo" />
+        </Link>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)} />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link className='ps-4' as={Link} to="/" onClick={() => setExpanded(false)}>Inicio</Nav.Link>
+
+            <Nav.Link className='ps-4' onClick={() => setShowModal(true)}>Donar</Nav.Link>
+            <Nav.Link className='ps-4' as={Link} to="/productos">Tienda</Nav.Link>
+
+            <NavDropdown className='ps-4' title="Estética de uñas" id="basics-nav-dropdown">
+              <NavDropdown.Item as={Link} to="/unas" onClick={() => setExpanded(false)}>Catálogo</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/unasinfo" onClick={() => setExpanded(false)}>Info</NavDropdown.Item>
+              {user && (user.rol === 'admin' || user.rol === 'cliente') && (
+                <>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item as={Link} to="/turnos" onClick={() => setExpanded(false)}>Solicitar turno</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/turnos/lista" onClick={() => setExpanded(false)}>Mis turnos</NavDropdown.Item>
+                </>
+              )}
             </NavDropdown>
-            <Nav.Link href="#" disabled>
-              sobre nosotros
-            </Nav.Link>
+
+            {user && (user.rol === 'admin' || user.rol === 'cliente') && (
+              <>
+                <Nav.Link className='ps-4' as={Link} to="/planes" onClick={() => setExpanded(false)}>Nuestros planes</Nav.Link>
+              </>
+            )}
+
+            {user && user.rol === 'admin' && (
+              <NavDropdown className='ps-4' title="Admin" id="admin-nav-dropdown">
+                <NavDropdown.Item as={Link} to="/adminUsers" onClick={() => setExpanded(false)}>Admin Usuarios</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/adminProducts" onClick={() => setExpanded(false)}>Admin Productos</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/adminAppointments" onClick={() => setExpanded(false)}>Admin Turnos</NavDropdown.Item>
+              </NavDropdown>
+            )}
+
+            {user
+              ? (user.rol === 'admin' || user.rol === 'cliente') && (
+                <div className='contenedor-links'>
+                  <div className='position-relative'>
+                    <abbr title="Carrito" className='abbr'>
+                      <Link to="/carrito" className='carrito-link' onClick={() => setExpanded(false)}>
+                        <SVG
+                          name={carrito.length > 0 ? 'cart-go-fill' : 'cart-normal-fill'}
+                          width="42px"
+                          height="42px"
+                          color={carrito.length > 0 ? 'green' : 'transparent'}
+                        />
+                        <span className={`cart-item-count${carrito.length > 0 ? ' show-space' : ' hidden-space'}`}>{carrito.length}</span>
+                      </Link>
+                    </abbr>
+                  </div>
+
+                  <div className='position-relative'>
+                    <abbr title="Favoritos" className='abbr'>
+                      <Link to="/favoritos" className='favoritos-link' onClick={() => setExpanded(false)}>
+                        <SVG
+                          name={'favs-heart-fill'}
+                          width="42px"
+                          height="42px"
+                          color={favoritos.length > 0 ? '#ff0019' : 'transparent'}
+                        />
+                        <span className={`favs-item-count${favoritos.length > 0 ? ' show-space' : ' hidden-space'}`}>{favoritos.length}</span>
+                      </Link>
+                    </abbr>
+                  </div>
+                  <Nav.Link className='ps-4 text-danger' onClick={handleLogout}>Cerrar Sesión</Nav.Link>
+                </div>
+              )
+              : (
+                <div className='contenedor-links'>
+                  <Nav.Link className='ps-4' onClick={handleLoginRedirect}>Iniciar Sesión</Nav.Link>
+                  <Nav.Link className='ps-4' onClick={handleRegisterRedirect}>Registrarse</Nav.Link>
+                </div>
+              )
+            }
           </Nav>
-          <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Buscar"
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button className='d-flex justify-content-center align-items-center' variant="outline-warning"><FaSearch size={16} /></Button>
-          </Form>
         </Navbar.Collapse>
-      </Container>
-    </Navbar>
+      </Navbar>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Hacer una Donación</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <DonationForm />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }
 
-export default NavScrollExample;
+export default NavigationBar;

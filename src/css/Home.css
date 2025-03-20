@@ -1,5 +1,6 @@
 .homeLogo {
   max-height: 50vh;
   object-fit: contain;
+  aspect-ratio: 1 / 1;
   background: linear-gradient(to right, #EFED6C 0%, #EFED6C 40%, #FCFBE1 50%, #FCFBE1 100%);
 }
