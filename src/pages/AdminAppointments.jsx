@@ -101,7 +101,7 @@ const AdminAppointments = () => {
       const body = {
         estado: 'completado'
       };
-      await putServerData(apiUrl, `/turnos/modificarTurno/${turnoId}`, body, token);
+      await putServerData(apiUrl, `/turnos/${turnoId}`, body, token);
       obtenerTurnos(fecha);
     } catch (error) {
       setError('Error al completar el turno.');
@@ -120,7 +120,7 @@ const AdminAppointments = () => {
         tipoAtencion: 'Consulta de producto',
         modalidad: 'online'
       };
-      await putServerData(apiUrl, `/turnos/modificarTurno/${turnoId}`, body, token);
+      await putServerData(apiUrl, `/turnos/${turnoId}`, body, token);
       obtenerTurnos(fecha);
     } catch (error) {
       setError('Error al liberar el turno.');
