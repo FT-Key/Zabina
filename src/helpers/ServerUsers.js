@@ -66,7 +66,7 @@ export async function addToCart(idProducto) {
     try {
       await postServerData(
         apiUrl,
-        `/favncart/carrito/agregar/${idProducto}`,
+        `/carrito/${idProducto}`,
         {},
         token
       );
@@ -83,7 +83,7 @@ export async function addToFav(idProducto) {
     try {
       await postServerData(
         apiUrl,
-        `/favncart/fav/agregar/${idProducto}`,
+        `/favoritos/${idProducto}`,
         {},
         token
       );
@@ -98,7 +98,7 @@ export async function getCart() {
   const token = getToken();
   if (token) {
     try {
-      const cart = await fetchServerData(apiUrl, `/favncart/carrito`, token);
+      const cart = await fetchServerData(apiUrl, `/carrito`, token);
       return cart;
     } catch (error) {
       console.error("Error al obtener carrito del servidor", error);
@@ -111,7 +111,7 @@ export async function getFavs() {
   const token = getToken();
   if (token) {
     try {
-      const favs = await fetchServerData(apiUrl, `/favncart/fav`, token);
+      const favs = await fetchServerData(apiUrl, `/favoritos`, token);
       return favs;
     } catch (error) {
       console.error("Error al obtener favoritos del servidor", error);
@@ -126,7 +126,7 @@ export async function removeFromCart(idProducto) {
     try {
       await deleteServerData(
         apiUrl,
-        `/favncart/carrito/quitar/${idProducto}`,
+        `/carrito/${idProducto}`,
         token
       );
     } catch (error) {
@@ -142,7 +142,7 @@ export async function removeFromFavs(idProducto) {
     try {
       await deleteServerData(
         apiUrl,
-        `/favncart/fav/quitar/${idProducto}`,
+        `/favoritos/${idProducto}`,
         token
       );
     } catch (error) {

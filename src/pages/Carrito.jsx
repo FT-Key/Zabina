@@ -39,7 +39,7 @@ const Carrito = () => {
     initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY);
     const apiUrl = import.meta.env.VITE_API_URL;
 
-    const response = await postServerData(apiUrl, "/favncart/carrito/comprarProductosMercadoPago", { productos, returnUrl }, token);
+    const response = await postServerData(apiUrl, "/carrito/comprarProductosMercadoPago", { productos, returnUrl }, token);
 
     if (response && typeof response === 'string') {
       setIdPreference(response);
