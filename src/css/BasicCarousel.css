@@ -1,0 +1,17 @@
+.basic-custom-carousel {
+  --color-border: white;
+
+  .carousel-inner {
+    border-top: solid 20px var(--color-border);
+    border-bottom: solid 20px var(--color-border);
+    box-sizing: border-box;
+  }
+
+  .carousel-item {
+    img {
+      width: 100%;
+      object-fit: fill;
+      aspect-ratio: 3 / 1;
+    }
+  }
+}
