@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+
 .navStyle {
   background: white;
   border-bottom: solid 1px black;
@@ -23,6 +25,11 @@
 
 .navbar {
   width: 100%;
+
+  .zabinaHome {
+    font-family: 'Playfair Display', serif;
+    color: #FF66C4;
+  }
 }
 
 .nav-brand {

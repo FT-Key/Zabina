@@ -55,12 +55,9 @@ function NavigationBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)} />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link className='ps-4' as={Link} to="/" onClick={() => setExpanded(false)}>Inicio</Nav.Link>
+            <Nav.Link className='ps-4 zabinaHome' as={Link} to="/" onClick={() => setExpanded(false)}>Zabina</Nav.Link>
 
-            <Nav.Link className='ps-4' onClick={() => setShowModal(true)}>Donar</Nav.Link>
-            <Nav.Link className='ps-4' as={Link} to="/productos">Tienda</Nav.Link>
-
-            <NavDropdown className='ps-4' title="Estética de uñas" id="basics-nav-dropdown">
+            <NavDropdown className='ps-4' title="Nuestros productos" id="basics-nav-dropdown">
               <NavDropdown.Item as={Link} to="/unas" onClick={() => setExpanded(false)}>Catálogo</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/unasinfo" onClick={() => setExpanded(false)}>Info</NavDropdown.Item>
               {user && (user.rol === 'admin' || user.rol === 'cliente') && (
@@ -71,6 +68,10 @@ function NavigationBar() {
                 </>
               )}
             </NavDropdown>
+
+            <Nav.Link className='ps-4' as={Link} to="/SobreMi">Quiénes somos</Nav.Link>
+            <Nav.Link className='ps-4' as={Link} to="/productos">Tienda</Nav.Link>
+            <Nav.Link className='ps-4' onClick={() => setShowModal(true)}>Donar</Nav.Link>
 
             {user && (user.rol === 'admin' || user.rol === 'cliente') && (
               <>
