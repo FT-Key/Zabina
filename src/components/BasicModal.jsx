@@ -45,151 +45,141 @@ const BasicModal = ({
     setEditedData(formData);
   }, [formData]);
 
+  const parseNestedName = (name) => {
+    if (name.includes("[")) {
+      const [mainKey, index, subKey] = name.match(/(\w+)\[(\d+)\]\.(\w+)/).slice(1);
+      return { type: "array", mainKey, index: parseInt(index, 10), subKey };
+    }
+    if (name.includes(".")) {
+      const [mainKey, subKey] = name.split(".");
+      return { type: "object", mainKey, subKey };
+    }
+    return { type: "simple", key: name };
+  };
+
+  const getValueByInputType = (inputType, value, checked) => {
+    if (inputType === "checkbox") return checked;
+    if (inputType === "date") return new Date(value);
+    return value;
+  };
+
   const handleChange = (e) => {
     const { name, value, type: inputType, checked, files } = e.target;
     const updatedData = { ...editedData };
 
-    if (inputType === "file") {
-      if (files && files.length > 0) {
+    // Archivo
+    if (inputType === "file" && files?.length > 0) {
+      const fileUrl = URL.createObjectURL(files[0]);
+      updatedData["uploadedFile"] = files[0];
+      updatedData[name] = fileUrl;
+      setEditedData(updatedData);
+      return;
+    }
 
-        // Crear un enlace temporal para mostrar la imagen
-        const fileUrl = URL.createObjectURL(files[0]);
+    const parsed = parseNestedName(name);
+    const inputValue = getValueByInputType(inputType, value, checked);
 
-        updatedData["uploadedFile"] = files[0]; // Guardar temporalmente el archivo
-        updatedData[name] = fileUrl;
-      }
-    } else if (inputType === "date") {
-      updatedData[name] = new Date(value);
-    } else if (name.includes("[")) {
-      // Lógica para manejar arrays
-      const [mainKey, index, subKey] = name
-        .match(/(\w+)\[(\d+)\]\.(\w+)/)
-        .slice(1);
-      const idx = parseInt(index, 10);
-
+    if (parsed.type === "array") {
+      const { mainKey, index, subKey } = parsed;
       updatedData[mainKey] = [
-        ...updatedData[mainKey].slice(0, idx),
+        ...updatedData[mainKey].slice(0, index),
         {
-          ...updatedData[mainKey][idx],
-          [subKey]: inputType === "checkbox" ? checked : value,
+          ...updatedData[mainKey][index],
+          [subKey]: inputValue,
         },
-        ...updatedData[mainKey].slice(idx + 1),
+        ...updatedData[mainKey].slice(index + 1),
       ];
-    } else if (name.includes(".")) {
-      // Lógica para manejar objetos anidados
-      const [mainKey, subKey] = name.split(".");
+    } else if (parsed.type === "object") {
+      const { mainKey, subKey } = parsed;
       updatedData[mainKey] = {
         ...updatedData[mainKey],
-        [subKey]: inputType === "checkbox" ? checked : value,
+        [subKey]: inputValue,
       };
     } else {
-      // Para campos no anidados
-      if (name === "calificaciones") {
-        updatedData[name] = parseFloat(value);
-      } else {
-        updatedData[name] = inputType === "checkbox" ? checked : value;
-      }
+      updatedData[parsed.key] = parsed.key === "calificaciones"
+        ? parseFloat(inputValue)
+        : inputValue;
     }
 
     setEditedData(updatedData);
   };
 
+
+  const removeBlobUrlFields = (type, data) => {
+    const updated = { ...data };
+    if (type === "adminUsers" && updated.fotoPerfil?.startsWith("blob:")) {
+      delete updated.fotoPerfil;
+    }
+    if (type === "adminProducts" && updated.imagenUrl?.startsWith("blob:")) {
+      delete updated.imagenUrl;
+    }
+    return updated;
+  };
+
+  const getValidationErrors = (type, data) => {
+    switch (type) {
+      case "adminUsers":
+        return validateUserFields(data);
+      case "adminProducts":
+        return validateProductFields(data);
+      default:
+        return null;
+    }
+  };
+
+  const updateEntityData = async (type, id, data) => {
+    switch (type) {
+      case "adminUsers":
+        return (await putUser(id, data)).usuario;
+      case "adminProducts":
+        return (await putProduct(id, data)).producto;
+      default:
+        return null;
+    }
+  };
+
+  const uploadImageIfNeeded = async (type, id, file) => {
+    if (!file) return null;
+    const fileData = new FormData();
+    fileData.append("image", file);
+
+    switch (type) {
+      case "adminUsers":
+        return (await uploadProfileImage(id, fileData)).data;
+      case "adminProducts":
+        return (await uploadProductImage(id, fileData)).data;
+      default:
+        return null;
+    }
+  };
+
   const handleSaveChanges = async () => {
     setIsLoading(true);
-    let validationErrors;
-
-    switch (true) {
-      // Elimina el campo fotoPerfil si comienza con 'blob:'
-      case type === "adminUsers":
-        if (typeof editedData.fotoPerfil === "string" && editedData.fotoPerfil.startsWith("blob:")) {
-          delete editedData.fotoPerfil;
-        }
-        break;
-
-      case type === "adminProducts":
-        if (typeof editedData.imagenUrl === "string" && editedData.imagenUrl.startsWith("blob:")) {
-          delete editedData.imagenUrl;
-        }
-        break;
-
-      default:
-        break;
-    }
-
-    switch (true) {
-      case type === "adminUsers":
-        validationErrors = validateUserFields(editedData);
-        break;
-
-      case type === "adminProducts":
-        validationErrors = validateProductFields(editedData);
-        break;
-
-      default:
-        break;
-    }
-
-    if (validationErrors && Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      let newObjectData;
-      const { uploadedFile, ...productDataWithoutFile } = editedData;
+      const cleanedData = removeBlobUrlFields(type, editedData);
+      const { uploadedFile, ...dataWithoutFile } = cleanedData;
 
-      let updatedData;
-
-      switch (true) {
-        case type === "adminUsers":
-          updatedData = await putUser(editedData._id, productDataWithoutFile);
-          newObjectData = updatedData.usuario;
-          break;
-
-        case type === "adminProducts":
-          updatedData = await putProduct(editedData._id, productDataWithoutFile);
-          newObjectData = updatedData.producto;
-          break;
-
-        default:
-          break;
+      const errors = getValidationErrors(type, cleanedData);
+      if (errors && Object.keys(errors).length > 0) {
+        setErrors(errors);
+        return;
       }
 
-      // Si hay un archivo seleccionado, realizar la subida en una llamada separada
-      if (uploadedFile) {
-        const fileData = new FormData();
-        fileData.append("image", uploadedFile);
+      let newObjectData = await updateEntityData(type, cleanedData._id, dataWithoutFile);
 
-        let uploadResponse;
-        switch (true) {
-          case type === "adminUsers":
-            uploadResponse = await uploadProfileImage(editedData._id, fileData);
-            break;
-
-          case type === "adminProducts":
-            uploadResponse = await uploadProductImage(editedData._id, fileData);
-            break;
-
-          default:
-            break;
-        }
-
-        if (!uploadResponse) {
-          throw new Error(uploadResponse.message);
-        } else {
-          newObjectData = uploadResponse.data;
-        }
+      const imageUploadResponse = await uploadImageIfNeeded(type, cleanedData._id, uploadedFile);
+      if (imageUploadResponse) {
+        newObjectData = imageUploadResponse;
       }
 
-      setFormData(editedData);
-      functionUpdateData((prevMark) => !prevMark);
-      if (typeof functionNewUpdatedData === 'function') {
+      setFormData(cleanedData);
+      functionUpdateData(prev => !prev);
+      if (typeof functionNewUpdatedData === "function") {
         functionNewUpdatedData(newObjectData);
       }
       onHide();
     } catch (error) {
-      console.error("Error al guardar el producto:", error);
+      console.error("Error al guardar:", error);
     } finally {
       setIsLoading(false);
     }
