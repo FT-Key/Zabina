@@ -249,7 +249,7 @@ function BasicForm({ type }) {
             </Form.Group>
 
             <Container className='d-flex justify-content-center align-items-center pt-2'>
-              <Link to={'/recuperarContraseña'}>¿Olvidaste tu contraseña?</Link>
+              <Link to={'/recuperarContrasenia'}>¿Olvidaste tu contraseña?</Link>
             </Container>
           </>
         }

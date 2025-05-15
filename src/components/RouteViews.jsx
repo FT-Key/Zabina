@@ -19,9 +19,9 @@ import PagosResult from "../pages/PagosResult";
 import Planes from "../pages/Planes";
 import ProductsComponent from "../pages/ProductsComponent";
 import Comentarios from "../pages/Comentarios";
-
-import { FloatingWhatsApp } from "react-floating-whatsapp";
 import NailsComponent from "../pages/NailsComponent";
+import RecoverPassword from "../pages/RecoverPassword";
+import { FloatingWhatsApp } from "react-floating-whatsapp";
 
 const RouteViews = () => {
   return (
@@ -46,6 +46,7 @@ const RouteViews = () => {
         <Route path="/productos" element={<ProductsComponent />} />
         <Route path="/unas" element={<NailsComponent />} />
         <Route path="/comentarios" element={<Comentarios />} />
+        <Route path="/recuperarContrasenia" element={<RecoverPassword />} />
 
         {/* Rutas protegidas para roles específicos */}
         <Route
