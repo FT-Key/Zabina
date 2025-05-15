@@ -23,7 +23,7 @@ function BasicCard({ data, type, onDelete }) {
   return (
     <>
       {type === "productCard" && (
-        <Card>
+        <Card className="customCard">
           <Card.Img variant="top" src={data.imagenUrl} />
           <Card.Body>
             <Card.Title>{data.nombre}</Card.Title>

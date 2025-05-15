@@ -1,4 +1,4 @@
-.card {
+.card.customCard {
 
   width: clamp(30rem, 20vw, 35rem);
   margin: 0;
