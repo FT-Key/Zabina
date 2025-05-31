@@ -121,7 +121,7 @@ function BasicForm({ type }) {
       if (serverResponse.token) {
         const { token: jwtToken } = serverResponse;
 
-        loginContext(jwtToken);
+        loginContext(jwtToken, formLogin.userRemember);
         redirectAfterLogin(navigate);
 
       } else if (!serverResponse.token) {
@@ -240,6 +240,7 @@ function BasicForm({ type }) {
           <>
             <Form.Group controlId="formRemember" className='pt-2'>
               <Form.Check
+                className='loginCheckbox'
                 name='userRemember'
                 type="checkbox"
                 label="Mantener sesión iniciada"

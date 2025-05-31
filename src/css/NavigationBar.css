@@ -8,15 +8,12 @@
   display: flex;
   padding: 1rem 1rem;
   width: 100%;
+  --nav-logo-color: #480375;
 
   * {
     font-size: 1.75rem;
     text-align: center;
   }
-}
-
-.nav-brand {
-  display: none;
 }
 
 .nav-space {
@@ -28,16 +25,23 @@
 
   .zabinaHome {
     font-family: 'Playfair Display', serif;
-    color: #FF66C4;
+    color: var(--nav-logo-color);
   }
 }
 
 .nav-brand {
   align-self: flex-start;
+  width: 6rem;
+  aspect-ratio: 1;
+  padding: .5rem;
+  border: solid 2px var(--nav-logo-color);
+  background: var(--color-logo-bg);
+  border-radius: 1rem;
 
   img {
-    border: solid 1px #FF67C4;
-    border-radius: 1rem;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: contain;
   }
 }
 
