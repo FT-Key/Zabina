@@ -4,7 +4,7 @@ import '../css/AppointmentRequest.css';
 import { getToken } from '../helpers/Token.helper';
 import { Helmet } from 'react-helmet-async';
 
-export const TIPOS_ATENCION = [
+const TIPOS_ATENCION = [
   'Consulta veterinaria',
   'Vacunación',
   'Desparasitación',

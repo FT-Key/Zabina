@@ -153,7 +153,8 @@ const Home = () => {
       </Helmet>
 
       <div>
-        <img className="homeLogo d-flex w-100" src="Zabina.png" alt="Zabina Logo" />
+        <img className="homeLogo d-flex w-100" src="ZabinaLogo_1_transparent.png" alt="Zabina Logo" />
+        <img src="../" alt="" />
       </div>
 
       <BasicCarousel data={data} />

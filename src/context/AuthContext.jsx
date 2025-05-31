@@ -110,13 +110,16 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const loginContext = async (token) => {
+  const loginContext = async (token, userRemember) => {
+    console.log("token: ", token);
     try {
       const decodedToken = decodeToken(token);
 
+      console.log("1");
       if (!decodedToken) {
         throw new Error("Token inválido o no se pudo decodificar");
       }
+      console.log("token: ", token);
 
       const { email, sub, ...otherUserData } = decodedToken;
       const user = {
@@ -124,11 +127,20 @@ export const AuthProvider = ({ children }) => {
         email,
         ...otherUserData,
       };
+      console.log("userRemember: ", userRemember);
+
+      if (userRemember) {
+        setToken(token, userRemember);
+      }
+      console.log("2 ");
 
       setUser(user);
-      setToken(token);
+      console.log("3 ");
+      setToken(token, userRemember);
+      console.log("4 ");
 
       await clearCart();
+      console.log("5 ");
 
       checkToken();
     } catch (error) {

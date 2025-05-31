@@ -19,11 +19,10 @@ export const isTokenValid = (token) => {
 
 export function getToken() {
   try {
-    const token = sessionStorage.getItem("authToken");
-    if (!token) {
-      return null;
-    }
-    return token;
+    const sessionToken = sessionStorage.getItem("authToken");
+    const localToken = localStorage.getItem("authToken");
+
+    return sessionToken || localToken || null;
   } catch (error) {
     console.error("Error al obtener el token de autorización:", error);
     return null;
@@ -40,12 +39,18 @@ export const decodeToken = (token) => {
   }
 };
 
-export function setToken(token) {
+export function setToken(token, userRemember) {
   try {
     if (!token) {
       throw new Error("Token vacío o no válido");
     }
-    sessionStorage.setItem("authToken", token);
+
+    if (userRemember) {
+      localStorage.setItem("authToken", token);
+      sessionStorage.setItem("authToken", token);
+    } else {
+      sessionStorage.setItem("authToken", token);
+    }
   } catch (error) {
     console.error("Error al guardar el token de autorización:", error);
   }
@@ -53,6 +58,7 @@ export function setToken(token) {
 
 export function removeToken() {
   try {
+    localStorage.removeItem("authToken");
     sessionStorage.removeItem("authToken");
   } catch (error) {
     console.error("Error al eliminar el token de autorización:", error);

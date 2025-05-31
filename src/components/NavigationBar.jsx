@@ -50,7 +50,7 @@ function NavigationBar() {
       <div className='nav-space'></div>
       <Navbar bg="light" expand="lg" expanded={expanded} onToggle={() => setExpanded(!expanded)} className='navStyle'>
         <Link className='nav-brand px-2' to="/" onClick={() => setExpanded(false)}>
-          <img src={logo} alt="logo" />
+          <img src={'ZabinaLogoMiniTransparent.png'} alt="logo" />
         </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)} />
         <Navbar.Collapse id="basic-navbar-nav">
