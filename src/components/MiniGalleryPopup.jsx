@@ -59,7 +59,6 @@ function MiniGalleryPopup({ images }) {
 
           <Button
             className="view-more-button m-0"
-            variant="primary"
             as={Link}
             to="/unas"
           >

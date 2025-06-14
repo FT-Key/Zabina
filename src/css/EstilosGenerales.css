@@ -46,7 +46,7 @@ body {
   min-height: 100vh;
   font-family: "Public Sans", sans-serif !important;
   background-color: var(--color-dark-2-claro);
-  background-image: url('ZabinaBackground.png');
+  background-image: url('ZabinaBackground2.png');
   background-repeat: repeat;
   /* Solo se repite verticalmente */
   background-size: auto;

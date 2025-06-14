@@ -66,4 +66,8 @@
   align-items: center;
   display: flex;
   cursor: pointer;
+  background: url("../assets/unas/nailsbg2.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }

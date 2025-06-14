@@ -152,16 +152,15 @@ const Home = () => {
         <title>Zabina Store</title>
       </Helmet>
 
-      <div>
-        <img className="homeLogo d-flex w-100" src="ZabinaLogo_1_transparent.png" alt="Zabina Logo" />
-        <img src="../" alt="" />
+      <div className="overflow-hidden">
+        <img className="homeLogo d-flex w-100 scale-125 svg-hd" src="ZabinaLogo_1_transparent.png" alt="Zabina Logo" />
       </div>
 
       <BasicCarousel data={data} />
 
       <Container fluid className="py-4">
-        <Title className="text-center py-3 fw-bold" type={'h2'} highlight={true}>Nuestro catálogo</Title>
-        <Row className="g-4">
+        <Title className="text-center py-3 fw-bold fs-1" type={'h2'} highlight={true}>Nuestro catálogo</Title>
+        <Row className="g-4 px-5">
           {products.map((product) => (
             <Col key={product._id} xs={12} sm={6} md={4} lg={4}>
               <MiniGalleryPopup images={product.collection} />
@@ -172,7 +171,7 @@ const Home = () => {
 
       <section className="products-section">
         <Container fluid>
-          <Title className="text-center fw-bold" type={'h2'} highlight={true}>Nuestros Productos</Title>
+          <Title className="text-center fw-bold fs-1" type={'h2'} highlight={true}>Nuestros Productos</Title>
           <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">
             {productosActuales.map((prod) => (
               <Col className="p-0 d-flex justify-content-center align-items-center" key={prod.id}>

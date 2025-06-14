@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, NavDropdown, Modal, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.svg';
 import { useAuth } from '../context/AuthContext';
 import '../css/NavigationBar.css';
 import SVG from './SVG';
@@ -47,10 +46,10 @@ function NavigationBar() {
 
   return (
     <>
-      <div className='nav-space'></div>
+      {/* <div className='nav-space'></div> */}
       <Navbar bg="light" expand="lg" expanded={expanded} onToggle={() => setExpanded(!expanded)} className='navStyle'>
-        <Link className='nav-brand px-2' to="/" onClick={() => setExpanded(false)}>
-          <img src={'ZabinaLogoMiniTransparent.png'} alt="logo" />
+        <Link className='nav-brand pb-2' to="/" onClick={() => setExpanded(false)}>
+          <img src={'ZabinaLogoMiniTransparent.png'} alt="logo" className='svg-hd' />
         </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)} />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -58,8 +57,9 @@ function NavigationBar() {
             <Nav.Link className='ps-4 zabinaHome fs-2 pt-0' as={Link} to="/" onClick={() => setExpanded(false)}>Zabina</Nav.Link>
 
             <NavDropdown className='ps-4' title="Nuestros productos" id="basics-nav-dropdown">
-              <NavDropdown.Item as={Link} to="/unas" onClick={() => setExpanded(false)}>Catálogo</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/unas" onClick={() => setExpanded(false)}>Diseños uñas</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/unasinfo" onClick={() => setExpanded(false)}>Info</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/productos" onClick={() => setExpanded(false)}>Tienda</NavDropdown.Item>
               {user && (user.rol === 'admin' || user.rol === 'cliente') && (
                 <>
                   <NavDropdown.Divider />
@@ -70,7 +70,6 @@ function NavigationBar() {
             </NavDropdown>
 
             <Nav.Link className='ps-4' as={Link} to="/SobreMi">Quiénes somos</Nav.Link>
-            <Nav.Link className='ps-4' as={Link} to="/productos">Tienda</Nav.Link>
             <Nav.Link className='ps-4' onClick={() => setShowModal(true)}>Donar</Nav.Link>
 
             {user && (user.rol === 'admin' || user.rol === 'cliente') && (

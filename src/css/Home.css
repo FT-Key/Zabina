@@ -4,3 +4,7 @@
   aspect-ratio: 1 / 1;
   background: linear-gradient(to right, var(--color-logo-bg) 0%, var(--color-logo-bg) 30%, #FCFBE1 60%, #FCFBE1 100%);
 }
+
+.scale-125 {
+  transform: scale(1.25);
+}

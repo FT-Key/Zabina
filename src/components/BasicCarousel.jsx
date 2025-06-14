@@ -3,7 +3,7 @@ import '../css/BasicCarousel.css';
 
 function BasicCarousel({ data }) {
   return (
-    <Carousel fade className='basic-custom-carousel' style={{ '--color-border': 'pink' }}>
+    <Carousel fade className='basic-custom-carousel' style={{ '--color-border': 'transparent' }}>
       {data.slice(0, 3).map((item, index) => (
         <Carousel.Item key={index}>
           <img src={item.imageUrl} alt={item.title} />
