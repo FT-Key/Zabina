@@ -24,13 +24,15 @@ const Login = () => {
       {user ?
         <h2 className='text-center m-5'>Ya se inició sesión</h2>
         :
-        <>
-          <BasicForm type={"inicioSesion"} />
-          <p className='text-center'>o</p>
-          <Container className='d-flex flex-column justify-content-center align-items-center pb-3 gap-2'>
-            <GoogleAuth useParameter={'login'} />
-          </Container>
-        </>
+        <div className='d-flex justify-content-center align-items-center flex-column text-white'>
+          <div className='bg-dark p-5 text-white mt-5 containerFormCustom'>
+            <BasicForm type={"inicioSesion"} />
+            <p className='text-center'>o</p>
+            <Container className='d-flex flex-column justify-content-center align-items-center pb-3 gap-2'>
+              <GoogleAuth useParameter={'login'} />
+            </Container>
+          </div>
+        </div>
       }
     </>
   );

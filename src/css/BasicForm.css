@@ -23,3 +23,7 @@
   flex-direction: row;
   gap: 10px;
 }
+
+.containerFormCustom{
+  border-radius: 1rem;
+}

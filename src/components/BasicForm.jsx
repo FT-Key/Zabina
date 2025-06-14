@@ -159,7 +159,7 @@ function BasicForm({ type }) {
 
   return (
     <>
-      <h2 className='pt-4 text-center'>{TEXT_TYPE[type]}</h2>
+      <h2 className='pt-4 text-center text-white'>{TEXT_TYPE[type]}</h2>
 
       <Form className='w-100 h-100 d-flex flex-column justify-content-center align-items-center pt-3 pb-2 register-login-form'>
 

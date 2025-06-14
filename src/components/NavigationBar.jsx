@@ -54,8 +54,8 @@ function NavigationBar() {
         </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)} />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link className='ps-4 zabinaHome' as={Link} to="/" onClick={() => setExpanded(false)}>Zabina</Nav.Link>
+          <Nav className="mr-auto d-flex justify-content-center align-items-center">
+            <Nav.Link className='ps-4 zabinaHome fs-2 pt-0' as={Link} to="/" onClick={() => setExpanded(false)}>Zabina</Nav.Link>
 
             <NavDropdown className='ps-4' title="Nuestros productos" id="basics-nav-dropdown">
               <NavDropdown.Item as={Link} to="/unas" onClick={() => setExpanded(false)}>Catálogo</NavDropdown.Item>

@@ -108,7 +108,7 @@ const NailsComponent = () => {
           <Container fluid className="py-4">
             <Row>
               <Col xs={12} md={2} className="">
-                <aside className="filters-aside border rounded p-3">
+                <aside className="filters-aside border rounded p-3 bg-dark text-white">
                   <h5 className="fw-bold">Filtros</h5>
                   <Form>
                     <Form.Group className="mb-3">
